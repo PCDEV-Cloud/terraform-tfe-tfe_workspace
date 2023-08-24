@@ -1,25 +1,9 @@
-# Terraform Cloud/Enterprise Workspace module
+provider "tfe" {
+  token = "<TFE_TOKEN_HERE>"
+}
 
-## Features
-1. Create a Terraform Cloud/Enterprise workspace.
-2. Connect the workspace to version control provider.
-3. Configure workspace variables.
-4. Create workspace notifications.
-5. Manage team access to the workspace.
-
-> **Warning**
-> 
-> Terraform Enterprise-only features have not been tested.
-
-> **Info**
->
-> Support for Run Tasks, Run Triggers and Policies in progress.
-
-## Usage
-
-```hcl
 module "tfe_workspace" {
-  source = "github.com/PCDEV-Cloud/terraform-tfe-tfe_workspace"
+  source = "../../"
 
   organization = "my-organization"
   project      = "Default"
@@ -111,4 +95,3 @@ module "tfe_workspace" {
     }
   ]
 }
-```
