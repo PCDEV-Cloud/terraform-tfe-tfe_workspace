@@ -6,6 +6,11 @@ data "tfe_organization" "this" {
 # Workspace
 ################################################################################
 
+data "tfe_project" "this" {
+  organization = data.tfe_organization.this.name
+  name         = var.project
+}
+
 data "tfe_oauth_client" "this" {
   count = var.version_control != null ? 1 : 0
 
@@ -22,7 +27,7 @@ data "tfe_ssh_key" "this" {
 
 resource "tfe_workspace" "this" {
   organization       = data.tfe_organization.this.name
-  project_id         = var.project_id
+  project_id         = data.tfe_project.this.id
   name               = var.name
   description        = var.description
   execution_mode     = var.execution_mode
