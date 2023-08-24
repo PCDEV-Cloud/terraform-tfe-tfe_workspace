@@ -1,27 +1,27 @@
 variable "organization" {
   type        = string
-  description = ""
+  description = "The name of the Terraform Cloud/Enterprise organization."
 }
 
-variable "project_id" {
+variable "project" {
   type        = string
-  description = ""
+  description = "The name of the project in which the workspace will be created."
 }
 
 variable "name" {
   type        = string
-  description = ""
+  description = "Name of the workspace."
 }
 
 variable "description" {
   type        = string
-  description = ""
+  description = "Description of the workspace."
 }
 
 variable "execution_mode" {
   type        = string
   default     = "remote"
-  description = ""
+  description = "Which execution mode to use. Valid values are remote, local and agent for Terraform Cloud and only remote and local for Terraform Enterprise."
 
   validation {
     condition     = contains(["remote", "local", "agent"], var.execution_mode)
@@ -32,13 +32,13 @@ variable "execution_mode" {
 variable "agent_pool_id" {
   type        = string
   default     = null
-  description = ""
+  description = "The ID of an agent pool to assign to the workspace. Required if execution_mode is set to agent."
 }
 
 variable "apply_method" {
   type        = string
   default     = "auto"
-  description = ""
+  description = "Whether to apply changes automatically or manually when a Terraform plan is successful. Valid values are auto and manual."
 
   validation {
     condition     = contains(["auto", "manual"], var.apply_method)
@@ -49,31 +49,33 @@ variable "apply_method" {
 variable "terraform_version" {
   type        = string
   default     = null
-  description = ""
+  description = "The version of Terraform to use for this workspace."
 }
 
 variable "terraform_working_directory" {
   type        = string
   default     = null
-  description = ""
+  description = "A relative path that Terraform will execute within."
 }
 
 variable "tags" {
   type        = list(string)
   default     = []
-  description = ""
+  description = "A list of tags for this workspace."
+
+  # lowercase letter, numbers, colons and hyphens
 }
 
 variable "ssh_key" {
   type        = string
   default     = null
-  description = ""
+  description = "The name of an SSH key to assign to the workspace."
 }
 
 variable "allow_destroy_plan" {
   type        = bool
   default     = true
-  description = ""
+  description = "Whether destroy plans can be queued on the workspace."
 }
 
 variable "version_control" {
@@ -96,7 +98,7 @@ variable "version_control" {
     )
   })
   default     = null
-  description = ""
+  description = "Settings for the workspace's VCS repository."
 
   validation {
     condition     = contains(["always", "path_prefixes", "path_patterns", "git_tags"], var.version_control["triggers"].type)
@@ -117,7 +119,7 @@ variable "variables" {
     description = optional(string, null)
   }))
   default     = []
-  description = ""
+  description = "A list of variables to be created in the workspace. Valid variable categories are terraform and env."
 }
 
 variable "notifications" {
@@ -132,7 +134,7 @@ variable "notifications" {
     triggers        = optional(list(string), []) # run:created, run:planning, run:needs_attention, run:applying, run:completed, run:errored, assessment:check_failure, assessment:drifted, assessment:failed
   }))
   default     = []
-  description = ""
+  description = "A list of notifications to be created in the workspace. Valid dastinations are webhook, email, slack and microsoft-teams. Note that for Terraform Cloud, the recipients for the email notification should be a list of valid email addresses or usernames added to the organization. For Terraform Enterprise, any email address can be added."
 
   validation {
     condition     = alltrue([for i in var.notifications : i.url != null if contains(["webhook", "slack", "microsoft-teams"], i.destination)])
@@ -164,7 +166,7 @@ variable "team_access" {
     }))
   }))
   default     = []
-  description = ""
+  description = "Associate a team to permissions in the workspace. Valid permission groups are admin, read, plan, write and custom."
 
   validation {
     condition     = alltrue([for i in var.team_access : contains(["admin", "read", "plan", "write", "custom"], i.permission_group)])
