@@ -1,15 +1,114 @@
-# \<name_here\> Terraform module
+# Terraform Cloud/Enterprise Workspace module
 
-\<description_here\>
+## Features
+1. Create a Terraform Cloud/Enterprise workspace.
+2. Connect the workspace to version control provider.
+3. Configure workspace variables.
+4. Create workspace notifications.
+5. Manage team access to the workspace.
+
+> **Warning**
+> 
+> Terraform Enterprise-only features have not been tested.
+
+> **Info**
+>
+> Support for Run Tasks, Run Triggers and Policies in progress.
 
 ## Usage
 
 ```hcl
-<code_here>
-```
+module "tfe_workspace" {
+  source = "github.com/PCDEV-Cloud/terraform-tfe-tfe_workspace"
 
-## Examples
+  organization = "my-organization"
+  project      = "Default"
 
-```hcl
-<code_here>
+  name                        = "InfraTest"
+  description                 = "Test environment for infrastructure."
+  execution_mode              = "remote"
+  apply_method                = "auto"
+  terraform_version           = "1.5.5"
+  terraform_working_directory = "/terraform/InfraTest"
+
+  tags = ["aws", "test", "infrastructure"]
+
+  version_control = {
+    name                        = "GitHub"
+    repository                  = "my-github/my-repository"
+    branch                      = "main"
+    include_submodules          = true
+    automatic_speculative_plans = true
+
+    triggers = {
+      type  = "path_patterns"
+      paths = ["terraform/**/*"]
+    }
+  }
+
+  variables = [
+    {
+      key   = "TFC_AWS_PROVIDER_AUTH"
+      value = true
+    },
+    {
+      key   = "TFC_AWS_RUN_ROLE_ARN"
+      value = "arn:aws:iam::123456789012:role/TFE_InfraTest_AccessRole"
+    }
+  ]
+
+  notifications = [
+    {
+      name        = "Owners"
+      destination = "email"
+
+      recipients = [
+        "first.user@my-company.com",
+        "secondUser-MyCompany"
+      ]
+
+      triggers = [
+        "run:created",
+        "run:planning",
+        "run:needs_attention",
+        "run:applying",
+        "run:completed",
+        "run:errored",
+        "assessment:check_failure",
+        "assessment:drifted",
+        "assessment:failed"
+      ]
+    },
+    {
+      name        = "Developers"
+      destination = "email"
+
+      recipients = [
+        "first.developer@my-company.com",
+        "secondDeveloper-MyCompany"
+      ]
+
+      triggers = [
+        "run:created",
+        "run:needs_attention",
+        "run:errored"
+      ]
+    }
+  ]
+
+  team_access = [
+    {
+      team             = "developers"
+      permission_group = "custom"
+      custom_permission = {
+        runs              = "read"
+        variables         = "write"
+        state_versions    = "read-outputs"
+        sentinel_mocks    = "none"
+        workspace_locking = false
+        run_tasks         = false
+      }
+    }
+  ]
+}
 ```
