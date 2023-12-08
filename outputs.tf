@@ -19,6 +19,6 @@ output "name" {
 }
 
 output "tags" {
-  value       = tfe_workspace.this.tags
+  value       = tfe_workspace.this.tag_names
   description = "A list of workspace's tags."
 }
