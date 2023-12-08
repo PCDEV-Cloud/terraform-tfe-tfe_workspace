@@ -40,23 +40,23 @@ resource "tfe_workspace" "this" {
   allow_destroy_plan = var.allow_destroy_plan
 
   dynamic "vcs_repo" {
-    for_each = var.version_control != null ? [1] : []
+    for_each = var.version_control != null && var.execution_mode == "remote" ? [1] : []
     content {
       oauth_token_id     = data.tfe_oauth_client.this[0].oauth_token_id
       identifier         = var.version_control["repository"]
       branch             = var.version_control["branch"]
       ingress_submodules = var.version_control["include_submodules"]
       tags_regex         = var.version_control["triggers"].type == "git_tags" ? var.version_control["triggers"].regex : null
-      # github_app_installation_id = ""
+      # TODO: github_app_installation_id = ""
     }
   }
 
-  speculative_enabled   = var.version_control["automatic_speculative_plans"]
-  queue_all_runs        = var.version_control["triggers"].type == "always" ? true : false
-  trigger_patterns      = var.version_control["triggers"].type == "path_patterns" ? var.version_control["triggers"].paths : null
-  trigger_prefixes      = var.version_control["triggers"].type == "path_prefixes" ? var.version_control["triggers"].paths : null
-  file_triggers_enabled = contains(["path_patterns", "path_prefixes"], var.version_control["triggers"].type) ? true : false
-  # tags_regex          = var.version_control["triggers"].type == "git_tags" ? var.version_control["triggers"].values : null
+  speculative_enabled   = try(var.version_control["automatic_speculative_plans"], null)
+  queue_all_runs        = try(var.version_control["triggers"].type == "always" ? true : false, null)
+  trigger_patterns      = try(var.version_control["triggers"].type == "path_patterns" ? var.version_control["triggers"].paths : null, null)
+  trigger_prefixes      = try(var.version_control["triggers"].type == "path_prefixes" ? var.version_control["triggers"].paths : null, null)
+  file_triggers_enabled = try(contains(["path_patterns", "path_prefixes"], var.version_control["triggers"].type) ? true : false, null)
+  # TODO: tags_regex          = var.version_control["triggers"].type == "git_tags" ? var.version_control["triggers"].values : null
 }
 
 ################################################################################

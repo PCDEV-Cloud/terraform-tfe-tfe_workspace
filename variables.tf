@@ -63,7 +63,7 @@ variable "tags" {
   default     = []
   description = "A list of tags for this workspace."
 
-  # lowercase letter, numbers, colons and hyphens
+  # TODO: lowercase letter, numbers, colons and hyphens
 }
 
 variable "ssh_key" {
@@ -101,12 +101,12 @@ variable "version_control" {
   description = "Settings for the workspace's VCS repository."
 
   validation {
-    condition     = contains(["always", "path_prefixes", "path_patterns", "git_tags"], var.version_control["triggers"].type)
+    condition     = var.version_control != null ? contains(["always", "path_prefixes", "path_patterns", "git_tags"], var.version_control["triggers"].type) : true
     error_message = "The object in the \"triggers.type\" must be the \"always\", \"path_prefixes\", \"path_patterns\" or \"git_tags\"."
   }
-  # if type = git_tags then paths = null and regex != null
-  # if type = path_prefixes or path_patterns then paths != null and regex = null
-  # if type = always then paths = null and regex = null
+  # TODO: if type = git_tags then paths = null and regex != null
+  # TODO: if type = path_prefixes or path_patterns then paths != null and regex = null
+  # TODO: if type = always then paths = null and regex = null
 }
 
 variable "variables" {
@@ -146,6 +146,7 @@ variable "notifications" {
     error_message = "The \"token\" must be defined if the \"destination\" value is set to \"webhook\"."
   }
 
+  # TODO:
   # validation {
   #   condition = alltrue([for i in var.notifications["email_addresses"] : can(regex("^[[:alnum:]]+([+_.-][[:alnum:]]+)*@[0-9a-z]+(.[0-9a-z]+)*(.[[:lower:]]+)$", i))])
   #   error_message = "The \"email_addresses\" values must be valid email addresses, e.g. my-email@my-domain.com."

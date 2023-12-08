@@ -112,3 +112,8 @@ module "tfe_workspace" {
   ]
 }
 ```
+
+## Examples
+
+- [vcs](https://github.com/PCDEV-Cloud/terraform-tfe-tfe_workspace/tree/main/examples/vcs-driven) - Creates a workspace based on Version Control
+- [cli-driven](https://github.com/PCDEV-Cloud/terraform-tfe-tfe_workspace/tree/main/examples/cli-driven) - Creates a CLI-Driven workspace
