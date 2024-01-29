@@ -2,11 +2,16 @@ provider "tfe" {
   token = "<TFE-TOKEN-HERE>"
 }
 
+data "tfe_project" "default" {
+  name         = "Default"
+  organization = "<TFE-ORGANIZATION-HERE>"
+}
+
 module "tfe_workspace" {
   source = "../../"
 
   organization = "<TFE-ORGANIZATION-HERE>"
-  project      = "Default"
+  project_id   = data.tfe_project.default.id
 
   name                        = "VCS-Example"
   description                 = "VCS example workspace."
