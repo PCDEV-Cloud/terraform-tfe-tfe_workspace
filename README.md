@@ -7,11 +7,15 @@
 4. Create workspace notifications.
 5. Manage team access to the workspace.
 
-> **Warning**
+> [!WARNING]
 > 
 > Terraform Enterprise-only features have not been tested.
 
-> **Info**
+> [!IMPORTANT]
+>
+> One of the variables, `project` or `project_id`, must be specified.
+
+> [!INFO]
 >
 > Support for Run Tasks, Run Triggers and Policies in progress.
 
