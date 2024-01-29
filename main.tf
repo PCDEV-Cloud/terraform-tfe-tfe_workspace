@@ -1,17 +1,10 @@
-# data "tfe_organization" "this" {
-#   name = var.organization
-# }
+data "tfe_organization" "this" {
+  name = var.organization
+}
 
 ################################################################################
 # Workspace
 ################################################################################
-
-# data "tfe_project" "this" {
-#   count = var.project_id == null ? 1 : 0
-
-#   organization = var.organization
-#   name         = var.project
-# }
 
 data "tfe_oauth_client" "this" {
   count = var.version_control != null ? 1 : 0
@@ -28,7 +21,7 @@ data "tfe_ssh_key" "this" {
 }
 
 resource "tfe_workspace" "this" {
-  organization       = var.organization
+  organization       = data.tfe_organization.this.name
   project_id         = var.project_id
   name               = var.name
   description        = var.description
@@ -88,14 +81,14 @@ resource "tfe_variable" "this" {
 data "tfe_organization_membership" "by_email" {
   for_each = local.recipients_by_email
 
-  organization = data.tfe_organization.this.name
+  organization = var.organization
   email        = each.key
 }
 
 data "tfe_organization_membership" "by_username" {
   for_each = local.recipients_by_username
 
-  organization = data.tfe_organization.this.name
+  organization = var.organization
   username     = each.key
 }
 
@@ -167,7 +160,7 @@ resource "tfe_notification_configuration" "microsoft_teams" {
 data "tfe_team" "this" {
   for_each = local.team_access
 
-  organization = data.tfe_organization.this.name
+  organization = var.organization
   name         = each.value["team"]
 }
 
