@@ -8,12 +8,13 @@
 5. Manage team access to the workspace.
 
 > [!WARNING]
+>
+> In version `v1.3.0`, the `var.project` variable has been replaced with the `var.project_id`.
+> Before updating the module, replace the `project` argument with `project_id` with the project's ID instead of project's name as a value.
+
+> [!WARNING]
 > 
 > Terraform Enterprise-only features have not been tested.
-
-> [!IMPORTANT]
->
-> One of the variables, `project` or `project_id`, must be specified.
 
 > [!NOTE]
 >
@@ -26,7 +27,7 @@ module "tfe_workspace" {
   source = "github.com/PCDEV-Cloud/terraform-tfe-tfe_workspace"
 
   organization = "my-organization"
-  project      = "Default"
+  project_id   = "my-project-id"
 
   name                        = "InfraTest"
   description                 = "Test environment for infrastructure."
