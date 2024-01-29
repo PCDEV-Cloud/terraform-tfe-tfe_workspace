@@ -9,7 +9,7 @@ data "tfe_organization" "this" {
 data "tfe_project" "this" {
   count = var.project_id == null ? 1 : 0
 
-  organization = data.tfe_organization.this.name
+  organization = var.organization
   name         = var.project
 }
 
