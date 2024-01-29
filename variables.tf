@@ -5,7 +5,14 @@ variable "organization" {
 
 variable "project" {
   type        = string
-  description = "The name of the project in which the workspace will be created."
+  default     = null
+  description = "The name of the project in which the workspace will be created. Omitted if `project_id` is specified."
+}
+
+variable "project_id" {
+  type        = string
+  default     = null
+  description = "The ID of the project in which the workspace will be created. If `project_id` is specified, the `project` variable will be omitted."
 }
 
 variable "name" {
