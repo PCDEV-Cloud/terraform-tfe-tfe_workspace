@@ -1,35 +1,35 @@
-data "tfe_organization" "this" {
-  name = var.organization
-}
+# data "tfe_organization" "this" {
+#   name = var.organization
+# }
 
 ################################################################################
 # Workspace
 ################################################################################
 
-data "tfe_project" "this" {
-  count = var.project_id == null ? 1 : 0
+# data "tfe_project" "this" {
+#   count = var.project_id == null ? 1 : 0
 
-  organization = var.organization
-  name         = var.project
-}
+#   organization = var.organization
+#   name         = var.project
+# }
 
 data "tfe_oauth_client" "this" {
   count = var.version_control != null ? 1 : 0
 
-  organization = data.tfe_organization.this.name
+  organization = var.organization
   name         = var.version_control["name"]
 }
 
 data "tfe_ssh_key" "this" {
   count = var.ssh_key != null ? 1 : 0
 
-  organization = data.tfe_organization.this.name
+  organization = var.organization
   name         = var.ssh_key
 }
 
 resource "tfe_workspace" "this" {
-  organization       = data.tfe_organization.this.name
-  project_id         = var.project_id == null ? data.tfe_project.this[0].id : var.project_id
+  organization       = var.organization
+  project_id         = var.project_id
   name               = var.name
   description        = var.description
   execution_mode     = var.execution_mode
