@@ -15,7 +15,7 @@
 >
 > One of the variables, `project` or `project_id`, must be specified.
 
-> [!INFO]
+> [!NOTE]
 >
 > Support for Run Tasks, Run Triggers and Policies in progress.
 
