@@ -7,6 +7,8 @@ data "tfe_organization" "this" {
 ################################################################################
 
 data "tfe_project" "this" {
+  count = var.project_id == null ? 1 : 0
+
   organization = data.tfe_organization.this.name
   name         = var.project
 }
@@ -27,7 +29,7 @@ data "tfe_ssh_key" "this" {
 
 resource "tfe_workspace" "this" {
   organization       = data.tfe_organization.this.name
-  project_id         = data.tfe_project.this.id
+  project_id         = var.project_id == null ? data.tfe_project.this[0].id : var.project_id
   name               = var.name
   description        = var.description
   execution_mode     = var.execution_mode
