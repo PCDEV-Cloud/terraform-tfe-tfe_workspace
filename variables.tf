@@ -3,15 +3,14 @@ variable "organization" {
   description = "The name of the Terraform Cloud/Enterprise organization."
 }
 
-variable "project" {
-  type        = string
-  default     = null
-  description = "The name of the project in which the workspace will be created. Omitted if `project_id` is specified."
-}
+# variable "project" {
+#   type        = string
+#   default     = null
+#   description = "The name of the project in which the workspace will be created. Omitted if `project_id` is specified."
+# }
 
 variable "project_id" {
   type        = string
-  default     = null
   description = "The ID of the project in which the workspace will be created. If `project_id` is specified, the `project` variable will be omitted."
 }
 
